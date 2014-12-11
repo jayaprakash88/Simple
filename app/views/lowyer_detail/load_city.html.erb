@@ -1,0 +1,49 @@
+
+<br/><div id='default'>  
+ <table cellspacing="0" cellpadding="0"   align="center"> 
+ <tr  class="tblebluehead">
+    <th>S.No</th>
+    <th>lowyer code</th>
+    <th>lowyer name</th>
+    <th>Experience</th>
+    <th>city</th>
+    <th>Rate</th>
+    <th>Service Name</th>
+    <th>Charges</th>
+  </tr>
+  <%count =0%>
+<% @lowyer_details.each do |lowyer_detail| %>
+    <%lsd=@ser.blank? ? lowyer_detail.lowyer_service_details : lowyer_detail.lowyer_service_details.where(:service_name=>@ser)%>
+    <%lsd.each do |each_service|%>
+    <%count +=1%>
+     <tr class='<%=cycle("tablerow1","tablerow2")%>'>
+     <td align="left"><%= count%></td>
+    <td align="left"><%= lowyer_detail.lowyer_code %></td>
+    <td align="left"><%= lowyer_detail.lowyer %></td>
+    <td align="left"><%= lowyer_detail.experience %></td>
+    <td align="left"><%= lowyer_detail.city %></td>
+    <td align="left"><%= lowyer_detail.rate %></td>
+    <td align="left"><%=each_service.service_name%></td>
+    <td align="left"><%=each_service.charges%></td>
+    </tr>
+    <%end%>
+<% end %>
+ </table>
+ </div>
+ <br/>
+ <div class="lowyer_count">
+<table cellspacing="0" cellpadding="0" >
+<tr align="center"><%#= will_paginate @lowyer_details %></tr>
+ <tr class="tblebluehead">
+    <th>Lowyer Name</th>
+    <th>No Of Service</th>
+  <% @lowyer_details.each do |lowyer_detail| %>
+  <tr class='<%=cycle("tablerow1","tablerow2")%>'>
+  	<%lsd=@ser.blank? ? lowyer_detail.lowyer_service_details : lowyer_detail.lowyer_service_details.where(:service_name=>@ser)%>
+    <td><%=lowyer_detail.lowyer%></td>
+    <%service_count=lsd.count%>
+    <td><%= service_count > 0 ? service_count : 'Service Not Available'%></td>
+  </tr>
+  <%end%>
+</table>
+</div>

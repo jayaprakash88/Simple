@@ -1,0 +1,89 @@
+<%= javascript_include_tag "application" %>
+ <div  align="center">
+        <h1><a href="#"><span>Searching Lowyer Details</span></a></h1>
+      </div>
+     
+<table cellspacing="0" cellpadding="0"   align="center">
+ <tr align="center">
+ <td colspan="3">Select City</td>
+ <td>
+  <%= select 'lowyer_detail','id',LowyerDetail.order('city').select('distinct city').collect{|c| c.city} ,{:prompt => "Select"},{:onchange=>"load_service()",:style=>"width:200px;"}%></td>
+
+ <td colspan="2">Select Service</td>
+
+ <td><%= select 'service','name',@service.collect{|s| s.service_name} ,{:include_blank => "Select"},{:onchange=>"load_service()",:style=>"width:200px;"}%></td>
+ </tr>
+</table>
+ <div id='default'>  
+ <table cellspacing="0" cellpadding="0"   align="center"> 
+ <tr  class="tblebluehead">
+    <th>S.No</th>
+    <th>lowyer code</th>
+    <th>lowyer name</th>
+    <th>Experience</th>
+    <th>city</th>
+    <th>Rate</th>
+    <th>Service Name</th>
+    <th>Charges</th>
+  </tr>
+  <%count =0%>
+<% @lowyer_details.each do |lowyer_detail| %>
+    <%lsd=lowyer_detail.lowyer_service_details%>
+    <%lsd.each do |each_service|%>
+    <%count +=1%>
+     <tr class='<%=cycle("tablerow1","tablerow2")%>'>
+     <td align="left"><%= count%></td>
+    <td align="left"><%= lowyer_detail.lowyer_code %></td>
+    <td align="left"><%= lowyer_detail.lowyer %></td>
+    <td align="left"><%= lowyer_detail.experience %></td>
+    <td align="left"><%= lowyer_detail.city %></td>
+    <td align="left"><%= lowyer_detail.rate %></td>
+    <td align="left"><%=each_service.service_name%></td>
+    <td align="left"><%=each_service.charges%></td>
+    </tr>
+    <%end%>
+<% end %>
+ </table>
+
+<br />
+<div class="lowyer_count">
+<table cellspacing="0" cellpadding="0" >
+<tr align="center"><%= will_paginate @lowyer_details %></tr>
+<br/>
+ <tr class="tblebluehead">
+    <th>Lowyer Name</th>
+    <th>No Of Service</th>
+  <% @lowyer_details.each do |lowyer_detail| %>
+  <tr class='<%=cycle("tablerow1","tablerow2")%>'>
+    <td><%=lowyer_detail.lowyer%></td>
+    <%service_count=lowyer_detail.lowyer_service_details.count%>
+    <td><%= service_count > 0 ? service_count : 'Service Not Available'%></td>
+  </tr>
+  <%end%>
+</table>
+</div>
+</div>
+
+<div id='result'>
+</div>
+
+<script type="text/javascript">
+
+
+ function load_service()
+    {
+      var city_id=$('#lowyer_detail_id').val();
+       var service=$('#service_name').val();
+       //alert(service)
+    $.ajax({
+     type: 'GET',
+  url: "<%=load_city_lowyer_detail_index_path%>",
+  data: { location_id: city_id,service_id:service }
+    }).done(function( msg ) {
+    //alert( "Data Saved: " + msg );
+     $("#default").hide();
+    $('#result').html(msg);
+
+  });
+    }
+</script>
