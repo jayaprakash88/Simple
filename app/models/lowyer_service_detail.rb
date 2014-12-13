@@ -1,7 +1,7 @@
 class LowyerServiceDetail < ActiveRecord::Base
 	 belongs_to :lowyer_detail
 	def LowyerServiceDetail.default_migration
-	 filename = "/home/prakash/Downloads/Lawyer Service List_new4.csv"
+	 filename = "#{Rails.root}/lib/csv/Lawyer_Service_List_new4.csv"
 
      file=File.new(filename,"r")
      while (line = file.gets)
